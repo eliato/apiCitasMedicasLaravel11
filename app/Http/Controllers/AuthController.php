@@ -4,31 +4,32 @@ namespace App\Http\Controllers;
 
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\UserRegisterRequest;
 use App\Models\User;
 use Validator;
 use Tymon\JWTAuth\Facades\JWTAuth;
+use Illuminate\Http\JsonResponse;
 
 class AuthController extends Controller
 {
 
 
-    public function register()
+    public function register(UserRegisterRequest $request)
     {
-        $validator = Validator::make(request()->all(), [
-            'name' => 'required',
-            'email' => 'required|email|unique:users',
-            'password' => 'required|min:8',
+        // $user = new User;
+        // $user->name = request()->name;
+        // $user->email = request()->email;
+        // $user->password = bcrypt(request()->password);
+        // $user->save();
+        $validatedData = $request->validated();
+        $user = User::create([
+            'name' => $validatedData['name'],
+            'email' => $validatedData['email'],
+            'password' => bcrypt($requevalidatedDatast['password'])
         ]);
 
-        if ($validator->fails()) {
-            return response()->json($validator->errors()->toJson(), 400);
-        }
 
-        $user = new User;
-        $user->name = request()->name;
-        $user->email = request()->email;
-        $user->password = bcrypt(request()->password);
-        $user->save();
+
         $token = auth('api')->login($user);
 
         return $this->respondWithToken($token);
