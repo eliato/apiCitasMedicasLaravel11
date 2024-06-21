@@ -9,7 +9,7 @@ use App\Http\Controllers\AuthController;
 // })->middleware('auth:sanctum');
 
 
-Route::group(['prfix' => 'auth'], function ($router) {
+Route::group(['prefix' => 'auth'], function ($router) {
     Route::post('login', [AuthController::class, 'login']);
     Route::post('register', [AuthController::class, 'register']);
 });
